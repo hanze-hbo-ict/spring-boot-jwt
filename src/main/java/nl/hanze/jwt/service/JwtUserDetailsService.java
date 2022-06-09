@@ -1,7 +1,9 @@
 package nl.hanze.jwt.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,12 +29,12 @@ public class JwtUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		String password = new BCryptPasswordEncoder().encode("password");
+		ArrayList<GrantedAuthority> authorities = new ArrayList<>();
 		if ("hanze-user".equals(username)) {
-			return new User("hanze-user", password, // "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
-					new ArrayList<>());
+			return new User("hanze-user", password,
+					authorities);
 		} else {
 			throw new UsernameNotFoundException("User not found with username: " + username);
 		}
 	}
-
 }

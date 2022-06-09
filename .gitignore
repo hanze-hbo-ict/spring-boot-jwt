@@ -1,0 +1,12 @@
+target/
+.project
+.classpath
+.settings/
+*.db
+mvnw*
+HELP.md
+*.iml
+*.swp
+.idea
+.DS_Store
+

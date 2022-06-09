@@ -3,6 +3,7 @@ package nl.hanze.jwt.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.hanze.jwt.model.JwtUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,9 +32,14 @@ public class JwtUserDetailsService implements UserDetailsService {
 		String password = new BCryptPasswordEncoder().encode("password");
 		ArrayList<GrantedAuthority> authorities = new ArrayList<>();
 		if ("hanze-user".equals(username)) {
-			return new User("hanze-user", password,
-					authorities);
-		} else {
+			authorities.add((GrantedAuthority) () -> "ROLE_USER");
+			return new User("hanze-user", password, authorities);
+		} else if ("hanze-admin".equals(username)) {
+			authorities.add((GrantedAuthority) () -> "ROLE_USER");
+			authorities.add((GrantedAuthority) () -> "ROLE_ADMIN");
+			return new JwtUser("hanze-admin", password, authorities);
+		}
+		else {
 			throw new UsernameNotFoundException("User not found with username: " + username);
 		}
 	}

@@ -3,9 +3,12 @@ package nl.hanze.jwt.config;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import nl.hanze.jwt.model.JwtUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -64,6 +67,8 @@ public class JwtTokenUtil implements Serializable {
 
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
+		List<String> s = userDetails.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toList());//  toList();//. forEach(a -> a.getAuthority());
+		claims.put("ROLES", s);
 		return doGenerateToken(claims, userDetails.getUsername());
 	}
 
